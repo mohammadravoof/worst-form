@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            min-height: 100vh;
+            background-color: #fff;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+        }
+
+        .container {
+            text-align: center;
+            max-width: 600px;
+            padding: 60px 40px;
+        }
+
+        .icon {
+            font-size: 80px;
+            margin-bottom: 24px;
+            animation: fadeIn 0.8s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        h1 {
+            font-size: 48px;
+            font-weight: 400;
+            color: #202124;
+            margin-bottom: 16px;
+            animation: fadeIn 1s ease-out;
+        }
+
+        .user-name {
+            color: #1a73e8;
+            font-weight: 500;
+        }
+
+        .subtitle {
+            font-size: 20px;
+            color: #5f6368;
+            font-weight: 400;
+            line-height: 1.5;
+            animation: fadeIn 1.2s ease-out;
+        }
+
+        /* Subtle confetti */
+        .confetti {
+            position: absolute;
+            width: 8px;
+            height: 8px;
+            opacity: 0.6;
+            animation: confetti-fall linear forwards;
+        }
+
+        @keyframes confetti-fall {
+            0% {
+                transform: translateY(-10vh) rotate(0deg);
+                opacity: 0.6;
+            }
+
+            100% {
+                transform: translateY(110vh) rotate(360deg);
+                opacity: 0;
+            }
+        }
+
+        /* Google-style button */
+        .action-button {
+            margin-top: 32px;
+            padding: 10px 24px;
+            background-color: #1a73e8;
+            color: #fff;
+            border: none;
+            border-radius: 4px;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: background-color 0.2s;
+            animation: fadeIn 1.4s ease-out;
+        }
+
+        .action-button:hover {
+            background-color: #1765cc;
+        }
+
+        /* Minimal decoration */
+        .checkmark {
+            position: absolute;
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background-color: #e8f5e9;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 32px;
+            opacity: 0.3;
+            animation: float 4s ease-in-out infinite;
+        }
+
+        @keyframes float {
+
+            0%,
+            100% {
+                transform: translateY(0);
+            }
+
+            50% {
+                transform: translateY(-20px);
+            }
+        }
+
+        .checkmark:nth-child(1) {
+            top: 10%;
+            left: 10%;
+            animation-delay: 0s;
+        }
+
+        .checkmark:nth-child(2) {
+            top: 15%;
+            right: 15%;
+            animation-delay: 1s;
+        }
+
+        .checkmark:nth-child(3) {
+            bottom: 15%;
+            left: 15%;
+            animation-delay: 2s;
+        }
+
+        .checkmark:nth-child(4) {
+            bottom: 10%;
+            right: 10%;
+            animation-delay: 1.5s;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Subtle background decoration -->
+    <div class="checkmark">✓</div>
+    <div class="checkmark">✓</div>
+    <div class="checkmark">✓</div>
+    <div class="checkmark">✓</div>
+
+    <!-- Main content -->
+    <div class="container">
+        <div class="icon">🎉</div>
+        <h1>Victory, <span class="user-name" id="userName"></span>!</h1>
+        <p class="subtitle">Even challenging design couldn't stop you.</p>
+        <button class="action-button" onclick="window.location.href='login.html'">Sign Out</button>
+    </div>
+
+    <script>
+        // Get name from localStorage
+        const userName = localStorage.getItem('name') || 'Champion';
+        document.getElementById('userName').textContent = userName;
+
+        // Generate subtle confetti
+        function createConfetti() {
+            const colors = ['#4285f4', '#ea4335', '#fbbc04', '#34a853'];
+            const confettiCount = 20;
+
+            for (let i = 0; i < confettiCount; i++) {
+                const confetti = document.createElement('div');
+                confetti.className = 'confetti';
+                confetti.style.left = Math.random() * 100 + 'vw';
+                confetti.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+                confetti.style.animationDuration = (Math.random() * 2 + 3) + 's';
+                confetti.style.animationDelay = Math.random() * 2 + 's';
+
+                if (Math.random() > 0.5) {
+                    confetti.style.borderRadius = '50%';
+                }
+
+                document.body.appendChild(confetti);
+            }
+        }
+
+        // Initialize animations
+        createConfetti();
+    </script>
+</body>
+
+</html>

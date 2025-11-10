@@ -1,0 +1,869 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign in - Google Account</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background-color: #fff;
+            padding: 20px;
+            overflow-x: hidden;
+        }
+
+        .main-wrapper {
+            display: flex;
+            gap: 40px;
+            align-items: center;
+            max-width: 1200px;
+            width: 100%;
+            justify-content: center;
+            transition: all 0.6s cubic-bezier(0.4, 0.0, 0.2, 1);
+        }
+
+        .container {
+            width: 450px;
+            padding: 48px 40px 36px;
+            border: 1px solid #dadce0;
+            border-radius: 8px;
+            background: #fff;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            transition: transform 0.6s cubic-bezier(0.4, 0.0, 0.2, 1);
+        }
+
+        .logo {
+            text-align: center;
+            margin-bottom: 10px;
+        }
+
+        .logo span {
+            font-size: 24px;
+            font-weight: 400;
+        }
+
+        .logo .g {
+            color: #4285f4;
+        }
+
+        .logo .o1 {
+            color: #ea4335;
+        }
+
+        .logo .o2 {
+            color: #fbbc04;
+        }
+
+        .logo .g2 {
+            color: #4285f4;
+        }
+
+        .logo .l {
+            color: #34a853;
+        }
+
+        .logo .e {
+            color: #ea4335;
+        }
+
+        h1 {
+            font-size: 24px;
+            font-weight: 400;
+            text-align: center;
+            margin-bottom: 8px;
+            color: #202124;
+        }
+
+        .subtitle {
+            text-align: center;
+            font-size: 16px;
+            color: #202124;
+            margin-bottom: 24px;
+        }
+
+        .form-group {
+            margin-bottom: 24px;
+        }
+
+        label {
+            display: block;
+            font-size: 14px;
+            color: #5f6368;
+            margin-bottom: 8px;
+        }
+
+        input[type="text"],
+        input[type="password"] {
+            width: 100%;
+            padding: 13px 15px;
+            border: 1px solid #dadce0;
+            border-radius: 4px;
+            font-size: 16px;
+            color: #202124;
+            transition: border-color 0.2s;
+        }
+
+        input[type="text"]:focus,
+        input[type="password"]:focus {
+            outline: none;
+            border-color: #1a73e8;
+            border-width: 2px;
+            padding: 12px 14px;
+        }
+
+        input.error-input {
+            border-color: #d93025;
+            border-width: 1px;
+        }
+
+        input.error-input:focus {
+            border-color: #d93025;
+            border-width: 2px;
+        }
+
+        .error {
+            color: #d93025;
+            font-size: 12px;
+            margin-top: 6px;
+            display: none;
+        }
+
+        .error.show {
+            display: block;
+        }
+
+        .button-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 32px;
+        }
+
+        .create-account {
+            color: #1a73e8;
+            font-size: 14px;
+            font-weight: 500;
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+        .create-account:hover {
+            text-decoration: underline;
+        }
+
+        button {
+            background-color: #1a73e8;
+            color: #fff;
+            border: none;
+            padding: 10px 24px;
+            border-radius: 4px;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+
+        button:hover {
+            background-color: #1765cc;
+        }
+
+        button:disabled {
+            background-color: #dadce0;
+            color: #80868b;
+            cursor: not-allowed;
+        }
+
+        /* Toast notification - Google style */
+        .toast {
+            position: fixed;
+            bottom: 24px;
+            left: 50%;
+            transform: translateX(-50%) translateY(100px);
+            background-color: #323232;
+            color: #fff;
+            padding: 14px 24px;
+            border-radius: 4px;
+            font-size: 14px;
+            box-shadow: 0 3px 5px -1px rgba(0, 0, 0, 0.2), 0 6px 10px 0 rgba(0, 0, 0, 0.14), 0 1px 18px 0 rgba(0, 0, 0, 0.12);
+            display: flex;
+            align-items: center;
+            gap: 24px;
+            opacity: 0;
+            transition: all 0.3s cubic-bezier(0.4, 0.0, 0.2, 1);
+            z-index: 1000;
+        }
+
+        .toast.show {
+            opacity: 1;
+            transform: translateX(-50%) translateY(0);
+        }
+
+        .toast-message {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .toast-icon {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+            font-weight: bold;
+        }
+
+        .toast.success .toast-icon {
+            background-color: #34a853;
+        }
+
+        .toast.error .toast-icon {
+            background-color: #ea4335;
+        }
+
+        .toast.info .toast-icon {
+            background-color: #1a73e8;
+        }
+
+        /* Visual Keyboard */
+        .keyboard-container {
+            width: 450px;
+            background: #fff;
+            border: 1px solid #dadce0;
+            border-radius: 8px;
+            padding: 20px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            opacity: 0;
+            transform: translateX(100px) scale(0.95);
+            transition: all 0.6s cubic-bezier(0.4, 0.0, 0.2, 1);
+            pointer-events: auto;
+            display: none;
+        }
+
+        .keyboard-container.show {
+            opacity: 1;
+            transform: translateX(0) scale(1);
+            pointer-events: auto;
+            display: block;
+        }
+
+        .keyboard-info {
+            text-align: center;
+            font-size: 12px;
+            color: #5f6368;
+            margin-bottom: 15px;
+            font-weight: 500;
+        }
+
+        .keyboard {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .keyboard-row {
+            display: flex;
+            gap: 5px;
+            justify-content: center;
+        }
+
+        .key {
+            min-width: 36px;
+            height: 36px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            background: #fff;
+            border: 1px solid #dadce0;
+            border-radius: 4px;
+            font-size: 12px;
+            font-weight: 500;
+            user-select: none;
+            transition: all 0.15s cubic-bezier(0.4, 0.0, 0.2, 1);
+            pointer-events: none;
+            position: relative;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+        }
+
+        .key.space {
+            flex: 1;
+            min-width: 150px;
+        }
+
+        .key.backspace,
+        .key.shift,
+        .key.wide {
+            min-width: 55px;
+            font-size: 10px;
+        }
+
+        .key.active {
+            background: #1a73e8;
+            color: #fff;
+            border-color: #1a73e8;
+            transform: scale(0.92);
+            box-shadow: 0 4px 12px rgba(26, 115, 232, 0.4);
+        }
+
+        .key-label {
+            font-size: 9px;
+            color: #5f6368;
+            margin-top: 2px;
+        }
+
+        .key.active .key-label {
+            color: rgba(255, 255, 255, 0.8);
+        }
+
+        /* Progress bar styles */
+        .password-progress-wrapper {
+            width: 100%;
+            height: 6px;
+            background: #e3e3e3;
+            border-radius: 4px;
+            margin-top: 8px;
+            display: none;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .password-progress-bar {
+            height: 100%;
+            background: #1a73e8;
+            width: 0%;
+            transition: none;
+        }
+
+        /* Animation keyframes */
+        @keyframes sweep {
+            from {
+                width: 0%;
+            }
+
+            to {
+                width: 100%;
+            }
+        }
+
+        /* Run animation when wrapper has .show */
+        .password-progress-wrapper.show .password-progress-bar {
+            animation: sweep 3s linear infinite;
+        }
+
+
+        @media (max-width: 1024px) {
+            .main-wrapper {
+                flex-direction: column;
+                gap: 20px;
+            }
+
+            .keyboard-container {
+                width: 100%;
+                max-width: 450px;
+                transform: translateY(50px) scale(0.95);
+            }
+
+            .keyboard-container.show {
+                transform: translateY(0) scale(1);
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="main-wrapper">
+        <div class="container" id="container">
+            <div class="logo">
+                <span class="g">G</span><span class="o1">o</span><span class="o2">o</span><span class="g2">g</span><span
+                    class="l">l</span><span class="e">e</span>
+            </div>
+            <h1>Sign in</h1>
+            <p class="subtitle">to continue</p>
+
+            <form id="loginForm">
+                <div class="form-group">
+                    <label for="name">Name</label>
+                    <input type="text" id="name" name="name" required>
+                    <div class="error" id="nameError">Please enter your name</div>
+                </div>
+
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <input type="password" id="password" name="password" required>
+                    <div class="error" id="passwordError">Please enter your password</div>
+                    <div class="password-progress-wrapper" id="progressWrapper">
+                        <div class="password-progress-bar" id="progressBar"></div>
+                    </div>
+                </div>
+
+                <div class="button-container">
+                    <a href="#" class="create-account" id="createAccountLink">Create account</a>
+                    <button type="submit" id="submitBtn">Sign in</button>
+                </div>
+            </form>
+        </div>
+
+        <!-- Visual Keyboard (display only) -->
+        <div class="keyboard-container" id="keyboardContainer">
+            <div class="keyboard-info">Visual Keyboard Guide - Layout: ABCDE... | Numbers: 0987...</div>
+            <div class="keyboard">
+                <div class="keyboard-row">
+                    <div class="key" data-visual="1">0<div class="key-label">1</div>
+                    </div>
+                    <div class="key" data-visual="2">9<div class="key-label">2</div>
+                    </div>
+                    <div class="key" data-visual="3">8<div class="key-label">3</div>
+                    </div>
+                    <div class="key" data-visual="4">7<div class="key-label">4</div>
+                    </div>
+                    <div class="key" data-visual="5">6<div class="key-label">5</div>
+                    </div>
+                    <div class="key" data-visual="6">5<div class="key-label">6</div>
+                    </div>
+                    <div class="key" data-visual="7">4<div class="key-label">7</div>
+                    </div>
+                    <div class="key" data-visual="8">3<div class="key-label">8</div>
+                    </div>
+                    <div class="key" data-visual="9">2<div class="key-label">9</div>
+                    </div>
+                    <div class="key" data-visual="0">1<div class="key-label">0</div>
+                    </div>
+                </div>
+                <div class="keyboard-row">
+                    <div class="key" data-visual="q">A<div class="key-label">Q</div>
+                    </div>
+                    <div class="key" data-visual="w">B<div class="key-label">W</div>
+                    </div>
+                    <div class="key" data-visual="e">C<div class="key-label">E</div>
+                    </div>
+                    <div class="key" data-visual="r">D<div class="key-label">R</div>
+                    </div>
+                    <div class="key" data-visual="t">E<div class="key-label">T</div>
+                    </div>
+                    <div class="key" data-visual="y">F<div class="key-label">Y</div>
+                    </div>
+                    <div class="key" data-visual="u">G<div class="key-label">U</div>
+                    </div>
+                    <div class="key" data-visual="i">H<div class="key-label">I</div>
+                    </div>
+                    <div class="key" data-visual="o">I<div class="key-label">O</div>
+                    </div>
+                    <div class="key" data-visual="p">J<div class="key-label">P</div>
+                    </div>
+                </div>
+                <div class="keyboard-row">
+                    <div class="key" data-visual="a">K<div class="key-label">A</div>
+                    </div>
+                    <div class="key" data-visual="s">L<div class="key-label">S</div>
+                    </div>
+                    <div class="key" data-visual="d">M<div class="key-label">D</div>
+                    </div>
+                    <div class="key" data-visual="f">N<div class="key-label">F</div>
+                    </div>
+                    <div class="key" data-visual="g">O<div class="key-label">G</div>
+                    </div>
+                    <div class="key" data-visual="h">P<div class="key-label">H</div>
+                    </div>
+                    <div class="key" data-visual="j">Q<div class="key-label">J</div>
+                    </div>
+                    <div class="key" data-visual="k">R<div class="key-label">K</div>
+                    </div>
+                    <div class="key" data-visual="l">S<div class="key-label">L</div>
+                    </div>
+                </div>
+                <div class="keyboard-row">
+                    <!-- <div class="key shift" data-visual="shift">Shift</div> -->
+                    <div class="key" data-visual="z">T<div class="key-label">Z</div>
+                    </div>
+                    <div class="key" data-visual="x">U<div class="key-label">X</div>
+                    </div>
+                    <div class="key" data-visual="c">V<div class="key-label">C</div>
+                    </div>
+                    <div class="key" data-visual="v">W<div class="key-label">V</div>
+                    </div>
+                    <div class="key" data-visual="b">X<div class="key-label">B</div>
+                    </div>
+                    <div class="key" data-visual="n">Y<div class="key-label">N</div>
+                    </div>
+                    <div class="key" data-visual="m">Z<div class="key-label">M</div>
+                    </div>
+                    <div class="key backspace" data-visual="backspace">Back</div>
+                </div>
+                <div class="keyboard-row">
+                    <!-- <div class="key wide" data-visual="!">!</div>
+          <div class="key wide" data-visual="@">@</div>
+          <div class="key wide" data-visual="#">#</div> -->
+                    <div class="key space" data-visual=" ">Space</div>
+                    <!-- <div class="key wide" data-visual="$">$</div>
+          <div class="key wide" data-visual="%">%</div>
+          <div class="key wide" data-visual="^">^</div>
+          <div class="key wide" data-visual="&">&</div>
+          <div class="key wide" data-visual="*">*</div> -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast notification -->
+    <div class="toast" id="toast">
+        <div class="toast-message">
+            <div class="toast-icon" id="toastIcon">OK</div>
+            <span id="toastMessage">Login successful</span>
+        </div>
+    </div>
+
+    <script>
+        const form = document.getElementById('loginForm');
+        const nameInput = document.getElementById('name');
+        const passwordInput = document.getElementById('password');
+        const nameError = document.getElementById('nameError');
+        const passwordError = document.getElementById('passwordError');
+        const toast = document.getElementById('toast');
+        const toastIcon = document.getElementById('toastIcon');
+        const toastMessage = document.getElementById('toastMessage');
+        const createAccountLink = document.getElementById('createAccountLink');
+        const keyboardContainer = document.getElementById('keyboardContainer');
+        const container = document.getElementById('container');
+        const progressWrapper = document.getElementById('progressWrapper');
+        const progressBar = document.getElementById('progressBar');
+
+        let typingTimer = null;
+        let keyboardShown = false;
+
+        let hasRunOnce = false;              // prevents auto reruns
+        let lastKeyWasUserBackspace = false; // to detect user-initiated emptying
+
+
+
+
+        // Custom keyboard mapping
+        const letterMap = {
+            'q': 'a', 'w': 'b', 'e': 'c', 'r': 'd', 't': 'e', 'y': 'f', 'u': 'g', 'i': 'h', 'o': 'i', 'p': 'j',
+            'a': 'k', 's': 'l', 'd': 'm', 'f': 'n', 'g': 'o', 'h': 'p', 'j': 'q', 'k': 'r', 'l': 's',
+            'z': 't', 'x': 'u', 'c': 'v', 'v': 'w', 'b': 'x', 'n': 'y', 'm': 'z',
+            'Q': 'A', 'W': 'B', 'E': 'C', 'R': 'D', 'T': 'E', 'Y': 'F', 'U': 'G', 'I': 'H', 'O': 'I', 'P': 'J',
+            'A': 'K', 'S': 'L', 'D': 'M', 'F': 'N', 'G': 'O', 'H': 'P', 'J': 'Q', 'K': 'R', 'L': 'S',
+            'Z': 'T', 'X': 'U', 'C': 'V', 'V': 'W', 'B': 'X', 'N': 'Y', 'M': 'Z'
+        };
+
+        const numberMap = {
+            '1': '0', '2': '9', '3': '8', '4': '7', '5': '6',
+            '6': '5', '7': '4', '8': '3', '9': '2', '0': '1'
+        };
+
+        function remapKey(key) {
+            if (letterMap[key]) return letterMap[key];
+            if (numberMap[key]) return numberMap[key];
+            return key;
+        }
+
+        // Highlight key on visual keyboard
+        function highlightKey(key) {
+            const normalizedKey = key.toLowerCase();
+            const keyElement = document.querySelector(`[data-visual="${normalizedKey}"]`);
+
+            if (keyElement) {
+                keyElement.classList.add('active');
+                setTimeout(() => {
+                    keyElement.classList.remove('active');
+                }, 1000);
+            }
+        }
+
+        // Show keyboard after 3 seconds of typing
+        function startTypingTimer() {
+            if (keyboardShown || typingTimer) return; // <-- Prevent restarting timer
+
+            typingTimer = setTimeout(() => {
+                keyboardContainer.classList.add('show');
+                keyboardShown = true;
+                showToast('Boss, the keyboard layout is changed for your comfort', 'info');
+            }, 4000);
+        }
+
+        // Add keydown event listener to both inputs
+        [nameInput, passwordInput].forEach(input => {
+            input.addEventListener('keydown', function (e) {
+                const allowedKeys = ['Backspace', 'Delete', 'ArrowLeft', 'ArrowRight', 'ArrowUp', 'ArrowDown',
+                    'Home', 'End', 'Tab', 'Enter', 'Escape', 'Control', 'Alt', 'Shift', 'Meta'];
+
+                if (allowedKeys.includes(e.key) || e.ctrlKey || e.metaKey) {
+                    if (e.key === 'Backspace') {
+                        highlightKey('backspace');
+                    }
+                    return;
+                }
+
+                e.preventDefault();
+
+                // Highlight the key being pressed
+                highlightKey(e.key);
+
+                const mappedKey = remapKey(e.key);
+                const cursorPos = input.selectionStart;
+                const currentValue = input.value;
+
+                input.value = currentValue.slice(0, cursorPos) + mappedKey + currentValue.slice(cursorPos);
+                input.setSelectionRange(cursorPos + 1, cursorPos + 1);
+                input.dispatchEvent(new Event('input'));
+            });
+        });
+
+        [nameInput, passwordInput].forEach(input => {
+            input.addEventListener('paste', function (e) {
+                e.preventDefault();
+                showToast("What are you trying to do bro 😊", "info");
+            });
+        });
+
+        [nameInput, passwordInput].forEach(input => {
+            input.addEventListener('copy', function (e) {
+                e.preventDefault();
+                showToast("What are you trying to do bro 😊", "info");
+            });
+        });
+
+        // Start timer when user starts typing in name field
+        nameInput.addEventListener('keydown', function (e) {
+            if (!['Backspace', 'Delete', 'ArrowLeft', 'ArrowRight', 'Tab', 'Enter', 'Shift', 'Control', 'Alt', 'Meta'].includes(e.key)) {
+                startTypingTimer();
+            }
+        });
+
+        // Helper function for toast (already in your file)
+        function showToast(message, type = "info") {
+            toast.classList.remove("success", "error", "info", "show");
+            toastMessage.textContent = message;
+            if (type === "success") {
+                toast.classList.add("success"); toastIcon.textContent = "OK";
+            } else if (type === "error") {
+                toast.classList.add("error"); toastIcon.textContent = "X";
+            } else if (type === "info") {
+                toast.classList.add("info"); toastIcon.textContent = "i";
+            }
+            setTimeout(() => toast.classList.add("show"), 10);
+            setTimeout(() => toast.classList.remove("show"), 3000);
+        }
+
+        // Create and style the progress bar
+        // const bar = document.createElement("div");
+        // bar.style.position = "absolute";
+        // bar.style.top = "110%";
+        // bar.style.left = "0";
+        // bar.style.height = "6px";
+        // bar.style.background = "#1a73e8";
+        // bar.style.width = "100%";
+        // bar.style.transition = "width 3s linear";
+        // bar.style.display = "none";
+        // passwordInput.parentElement.appendChild(bar);
+
+        // State machine variables
+        let state = "idle";
+        let passwordToggleInterval, backspaceInterval;
+        let passwordVisible = false;
+
+        // Replace the "bar" usages in startLoop() with these:
+        function startLoop() {
+            state = "waiting";
+            clearAllTimers();
+
+            passwordInput.focus();
+
+            // toggle password every 3s (unchanged)
+            passwordToggleInterval = setInterval(() => {
+                passwordVisible = !passwordVisible;
+                passwordInput.type = passwordVisible ? "text" : "password";
+            }, 3000);
+
+            setTimeout(() => {
+                showToast("I think you made a mistake, let me help by doing backspace.", "info");
+
+                // Show the real progress wrapper and start cycling
+                progressWrapper.style.display = "block";
+                progressWrapper.classList.add("show");
+
+
+                backspaceInterval = setInterval(() => {
+                    if (passwordInput.value.length > 0) {
+                        passwordInput.value = passwordInput.value.slice(0, -1);
+                        passwordInput.dispatchEvent(new Event('input'));
+                    } else {
+                        clearAllTimers();
+                        progressWrapper.classList.remove('show');   // if you’re using the CSS animation version
+                        progressWrapper.style.display = "none";
+                        hasRunOnce = true;                           // <-- mark as completed
+
+                        nameInput.focus();
+                        nameInput.value = "";
+                        nameInput.dispatchEvent(new Event('input'));
+                        // No restart here
+                    }
+
+                }, 3000);
+            }, 6000);
+        }
+
+
+
+        // Also hide the wrapper in clearAllTimers()
+        function clearAllTimers() {
+            clearInterval(passwordToggleInterval);
+            clearInterval(backspaceInterval);
+
+            // Stop and hide progress bar
+            progressWrapper.classList.remove("show");
+            progressWrapper.style.display = "none";
+        }
+
+        // Start the loop when password is focused
+        passwordInput.addEventListener('focus', function () {
+            clearAllTimers();
+            if (!hasRunOnce) startLoop();
+        });
+
+
+        // Optional: stop loop on name focus, then restart after clearing
+        nameInput.addEventListener('focus', function () {
+            clearAllTimers();
+            // Can optionally restart loop if needed
+        });
+
+        // Optionally start on page load
+        // window.onload = startLoop;
+
+        // Clear errors when typing
+        nameInput.addEventListener('input', function () {
+            nameError.classList.remove('show');
+            this.classList.remove('error-input');
+
+            // Once user starts refilling the name, allow a future run
+            if (this.value.length > 0) {
+                hasRunOnce = false;
+            }
+        });
+
+        // 1) clear validation styles (your existing listener)
+        passwordInput.addEventListener('input', function () {
+            passwordError.classList.remove('show');
+            this.classList.remove('error-input');
+        });
+
+        // 2) detect user backspace keypress
+        passwordInput.addEventListener('keydown', function (e) {
+            if (e.key === 'Backspace' && !e.ctrlKey && !e.metaKey) {
+                lastKeyWasUserBackspace = true;
+            } else {
+                lastKeyWasUserBackspace = false;
+            }
+        });
+
+        // 3) if password becomes empty due to user backspace → allow startLoop again
+        passwordInput.addEventListener('input', function () {
+            if (this.value.length === 0 && lastKeyWasUserBackspace && !hasRunOnce) {
+                startLoop();
+            }
+        });
+
+
+        // Form submission
+        form.addEventListener('submit', function (e) {
+            e.preventDefault();
+
+            const name = nameInput.value.trim();
+            const password = passwordInput.value;
+
+            let isValid = true;
+
+            nameError.classList.remove('show');
+            passwordError.classList.remove('show');
+            nameInput.classList.remove('error-input');
+            passwordInput.classList.remove('error-input');
+
+            if (name === '') {
+                nameError.textContent = 'Please enter your name';
+                nameError.classList.add('show');
+                nameInput.classList.add('error-input');
+                isValid = false;
+            }
+
+            if (password === '') {
+                passwordError.textContent = 'Please enter your password';
+                passwordError.classList.add('show');
+                passwordInput.classList.add('error-input');
+                isValid = false;
+            }
+
+            if (!isValid) {
+                return;
+            }
+
+            const storedName = localStorage.getItem('name');
+            const storedPassword = localStorage.getItem('password');
+
+            if (!storedName || !storedPassword) {
+                showToast('No account found. Please create an account first', 'error');
+                nameInput.classList.add('error-input');
+                passwordInput.classList.add('error-input');
+                return;
+            }
+
+            if (name === storedName && password === storedPassword) {
+                showToast('Login successful', 'success');
+
+                setTimeout(() => {
+                    window.location.href = 'dashboard.html';
+                }, 1500);
+
+                console.log('Login successful!');
+            } else {
+                showToast('Wrong name or password. Please try again', 'error');
+                nameInput.classList.add('error-input');
+                passwordInput.classList.add('error-input');
+            }
+        });
+
+        createAccountLink.addEventListener('click', function (e) {
+            e.preventDefault();
+
+            window.location.href = 'signup.html';
+
+        });
+
+        // Block copy/paste globally + show toast
+        document.addEventListener('keydown', function (e) {
+            // Detect CTRL + C or CTRL + V
+            if ((e.ctrlKey || e.metaKey) && (e.key === 'c' || e.key === 'v')) {
+                e.preventDefault();
+                showToast("What are you trying to do bro 😊", "info");
+            }
+        });
+
+        keyboardContainer.addEventListener('click', function () {
+            showToast("What are you trying to click bro 😆", "info");
+        });
+        // document.addEventListener("contextmenu", function (e) {
+        //     e.preventDefault();
+        //     showToast("What are you trying to do bro 😊", "info");
+        // });
+
+        // For demo purposes, set some credentials
+        // window.storedCredentials = { name: 'demo', password: 'demo123' };
+        // console.log('Demo credentials: name="demo", password="demo123"');
+    </script>
+</body>
+
+</html>

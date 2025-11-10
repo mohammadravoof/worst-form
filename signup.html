@@ -1,0 +1,403 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create your Account</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background-color: #fff;
+        }
+
+        .container {
+            width: 450px;
+            padding: 48px 40px 36px;
+            border: 1px solid #dadce0;
+            border-radius: 8px;
+            background: #fff;
+        }
+
+        .logo {
+            text-align: center;
+            margin-bottom: 10px;
+        }
+
+        .logo span {
+            font-size: 24px;
+            font-weight: 400;
+        }
+
+        .logo .g {
+            color: #4285f4;
+        }
+
+        .logo .o1 {
+            color: #ea4335;
+        }
+
+        .logo .o2 {
+            color: #fbbc04;
+        }
+
+        .logo .g2 {
+            color: #4285f4;
+        }
+
+        .logo .l {
+            color: #34a853;
+        }
+
+        .logo .e {
+            color: #ea4335;
+        }
+
+        h1 {
+            font-size: 24px;
+            font-weight: 400;
+            text-align: center;
+            margin-bottom: 8px;
+            color: #202124;
+        }
+
+        .subtitle {
+            text-align: center;
+            font-size: 16px;
+            color: #202124;
+            margin-bottom: 24px;
+        }
+
+        .form-group {
+            margin-bottom: 24px;
+        }
+
+        label {
+            display: block;
+            font-size: 14px;
+            color: #5f6368;
+            margin-bottom: 8px;
+        }
+
+        input[type="text"],
+        input[type="password"] {
+            width: 100%;
+            padding: 13px 15px;
+            border: 1px solid #dadce0;
+            border-radius: 4px;
+            font-size: 16px;
+            color: #202124;
+            transition: border-color 0.2s;
+        }
+
+        input[type="text"]:focus,
+        input[type="password"]:focus {
+            outline: none;
+            border-color: #1a73e8;
+            border-width: 2px;
+            padding: 12px 14px;
+        }
+
+        .error {
+            color: #d93025;
+            font-size: 12px;
+            margin-top: 6px;
+            display: none;
+        }
+
+        .error.show {
+            display: block;
+        }
+
+        .password-requirements {
+            font-size: 12px;
+            color: #5f6368;
+            margin-top: 8px;
+            line-height: 1.5;
+        }
+
+        .requirement {
+            display: flex;
+            align-items: center;
+            margin: 4px 0;
+        }
+
+        .requirement::before {
+            content: '•';
+            margin-right: 8px;
+            color: #5f6368;
+        }
+
+        .requirement.valid {
+            color: #1e8e3e;
+        }
+
+        .requirement.valid::before {
+            content: '✓';
+            color: #1e8e3e;
+            font-weight: bold;
+        }
+
+
+        .button-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 32px;
+        }
+
+        button {
+            background-color: #1a73e8;
+            color: #fff;
+            border: none;
+            padding: 10px 24px;
+            border-radius: 4px;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+
+        button:hover {
+            background-color: #1765cc;
+        }
+
+        button:disabled {
+            background-color: #dadce0;
+            color: #80868b;
+            cursor: not-allowed;
+        }
+
+        /* Toast notification - Google style */
+        .toast {
+            position: fixed;
+            bottom: 24px;
+            left: 50%;
+            transform: translateX(-50%) translateY(100px);
+            background-color: #323232;
+            color: #fff;
+            padding: 14px 24px;
+            border-radius: 4px;
+            font-size: 14px;
+            box-shadow: 0 3px 5px -1px rgba(0, 0, 0, 0.2), 0 6px 10px 0 rgba(0, 0, 0, 0.14), 0 1px 18px 0 rgba(0, 0, 0, 0.12);
+            display: flex;
+            align-items: center;
+            gap: 24px;
+            opacity: 0;
+            transition: all 0.3s cubic-bezier(0.4, 0.0, 0.2, 1);
+            z-index: 1000;
+        }
+
+        .toast.show {
+            opacity: 1;
+            transform: translateX(-50%) translateY(0);
+        }
+
+        .toast-message {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .toast-icon {
+            width: 20px;
+            height: 20px;
+            background-color: #34a853;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+            font-weight: bold;
+        }
+
+        .sign-in {
+            color: #1a73e8;
+            font-size: 14px;
+            font-weight: 500;
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+        .sign-in:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div class="logo">
+            <span class="g">G</span><span class="o1">o</span><span class="o2">o</span><span class="g2">g</span><span
+                class="l">l</span><span class="e">e</span>
+        </div>
+        <h1>Create your Account</h1>
+        <p class="subtitle">to continue</p>
+
+        <form id="signupForm">
+            <div class="form-group">
+                <label for="name">Name</label>
+                <input type="text" id="name" name="name" required>
+                <div class="error" id="nameError">Please enter your name</div>
+            </div>
+
+            <div class="form-group">
+                <label for="password">Password</label>
+                <input type="password" id="password" name="password" required>
+                <div class="error" id="passwordError">Password does not meet requirements</div>
+                <div class="password-requirements">
+                    <div class="requirement" id="req-length">Minimum 8 characters</div>
+                    <div class="requirement" id="req-upper">At least one uppercase letter</div>
+                    <div class="requirement" id="req-lower">At least one lowercase letter</div>
+                    <div class="requirement" id="req-number">At least one number</div>
+                    <div class="requirement" id="req-symbol">At least one symbol</div>
+                </div>
+            </div>
+
+            <div class="button-container">
+                <a href="#" class="sign-in" id="signIn">Sign in</a>
+                <button type="submit" id="submitBtn">Create account</button>
+            </div>
+        </form>
+    </div>
+
+    <!-- Toast notification -->
+    <div class="toast" id="toast">
+        <div class="toast-message">
+            <div class="toast-icon">✓</div>
+            <span>Sign up successful</span>
+        </div>
+    </div>
+
+    <script>
+        // In-memory storage (localStorage not supported in Claude artifacts)
+        // const storage = {};
+
+        const form = document.getElementById('signupForm');
+        const nameInput = document.getElementById('name');
+        const passwordInput = document.getElementById('password');
+        const nameError = document.getElementById('nameError');
+        const passwordError = document.getElementById('passwordError');
+        const toast = document.getElementById('toast');
+        const signIn = document.getElementById('signIn');
+
+        const requirements = {
+            length: document.getElementById('req-length'),
+            upper: document.getElementById('req-upper'),
+            lower: document.getElementById('req-lower'),
+            number: document.getElementById('req-number'),
+            symbol: document.getElementById('req-symbol')
+        };
+
+        // Password validation
+        passwordInput.addEventListener('input', function () {
+            const password = this.value;
+
+            // Check each requirement
+            const hasLength = password.length >= 8;
+            const hasUpper = /[A-Z]/.test(password);
+            const hasLower = /[a-z]/.test(password);
+            const hasNumber = /[0-9]/.test(password);
+            const hasSymbol = /[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]/.test(password);
+
+            // Update UI
+            requirements.length.classList.toggle('valid', hasLength);
+            requirements.upper.classList.toggle('valid', hasUpper);
+            requirements.lower.classList.toggle('valid', hasLower);
+            requirements.number.classList.toggle('valid', hasNumber);
+            requirements.symbol.classList.toggle('valid', hasSymbol);
+
+            // Hide error if all requirements met
+            if (hasLength && hasUpper && hasLower && hasNumber && hasSymbol) {
+                passwordError.classList.remove('show');
+            }
+        });
+
+        // Form submission
+        form.addEventListener('submit', function (e) {
+            e.preventDefault();
+
+            const name = nameInput.value.trim();
+            const password = passwordInput.value;
+
+            let isValid = true;
+
+            // Validate name
+            if (name === '') {
+                nameError.classList.add('show');
+                isValid = false;
+            } else {
+                nameError.classList.remove('show');
+            }
+
+            // Validate password
+            const hasLength = password.length >= 8;
+            const hasUpper = /[A-Z]/.test(password);
+            const hasLower = /[a-z]/.test(password);
+            const hasNumber = /[0-9]/.test(password);
+            const hasSymbol = /[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]/.test(password);
+
+            if (!hasLength || !hasUpper || !hasLower || !hasNumber || !hasSymbol) {
+                passwordError.classList.add('show');
+                isValid = false;
+            } else {
+                passwordError.classList.remove('show');
+            }
+
+            // If valid, store data and redirect
+            if (isValid) {
+                // Store in memory (would use localStorage.setItem('name', name) in a real environment)
+                // storage.name = name;
+                // storage.password = password;
+
+                // For localStorage use:
+                localStorage.setItem('name', name);
+                localStorage.setItem('password', password);
+
+                const localStorage_name = localStorage.getItem('name');
+                const localStorage_password = localStorage.getItem('password');
+
+                console.log('Stored data:', { localStorage_name, localStorage_password });
+
+
+                // Show toast notification
+                toast.classList.add('show');
+
+                // Redirect to login page after 1.5 seconds
+                setTimeout(() => {
+                    window.location.href = 'login.html';
+                }, 1500);
+            }
+        });
+
+        // Sign in link
+        signIn.addEventListener('click', function (e) {
+            e.preventDefault();
+
+            window.location.href = 'login.html';
+
+        });
+
+        // Clear name error on input
+        nameInput.addEventListener('input', function () {
+            if (this.value.trim() !== '') {
+                nameError.classList.remove('show');
+            }
+        });
+
+
+
+    </script>
+</body>
+
+</html>
